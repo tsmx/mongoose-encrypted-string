@@ -1,0 +1,24 @@
+{
+  "name": "@tsmx/mongoose-encryptedstring",
+  "version": "1.0.0",
+  "description": "EncryptedString type for Mongoose schemas.",
+  "main": "mongoose-encryptedstring.js",
+  "scripts": {
+    "test": "jest",
+    "test-coverage": "jest --coverage"
+  },
+  "author": "tsmx <dev@tsmx.net>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tsmx/mongoose-encryptedstring.git"
+  },
+  "dependencies": {
+    "@tsmx/string-crypto": "^1.0.2",
+    "mongoose": "^5.10.9"
+  },
+  "devDependencies": {
+    "jest": "^26.5.3",
+    "mongodb-memory-server": "^6.9.2"
+  }
+}
