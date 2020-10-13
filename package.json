@@ -1,8 +1,8 @@
 {
-  "name": "@tsmx/mongoose-encryptedstring",
+  "name": "@tsmx/mongoose-encrypted-string",
   "version": "1.0.0",
   "description": "EncryptedString type for Mongoose schemas.",
-  "main": "mongoose-encryptedstring.js",
+  "main": "mongoose-encrypted-string.js",
   "engines": {
     "node": ">=12.0.0",
     "npm": ">=6.0.0"
@@ -16,7 +16,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tsmx/mongoose-encryptedstring.git"
+    "url": "https://github.com/tsmx/mongoose-encrypted-string.git"
   },
   "keywords": [
     "mongoose",

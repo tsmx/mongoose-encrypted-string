@@ -1,24 +1,22 @@
-# [**@tsmx/mongoose-encryptedstring**](https://github.com/tsmx/mongoose-encryptedstring)
+# [**@tsmx/mongoose-encrypted-string**](https://github.com/tsmx/mongoose-encrypted-string)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-![npm (scoped)](https://img.shields.io/npm/v/@tsmx/mongoose-encryptedstring)
-![node-current (scoped)](https://img.shields.io/node/v/@tsmx/mongoose-encryptedstring)
-[![Build Status](https://travis-ci.com/tsmx/mongoose-encryptedstring.svg?branch=master)](https://travis-ci.org/tsmx/mongoose-encryptedstring)
-[![Coverage Status](https://coveralls.io/repos/github/tsmx/mongoose-encryptedstring/badge.svg?branch=master)](https://coveralls.io/github/tsmx/mongoose-encryptedstring?branch=master)
+![npm (scoped)](https://img.shields.io/npm/v/@tsmx/mongoose-encrypted-string)
+![node-current (scoped)](https://img.shields.io/node/v/@tsmx/mongoose-encrypted-string)
+[![Build Status](https://travis-ci.com/tsmx/mongoose-encrypted-string.svg?branch=master)](https://travis-ci.org/tsmx/mongoose-encrypted-string)
+[![Coverage Status](https://coveralls.io/repos/github/tsmx/mongoose-encrypted-string/badge.svg?branch=master)](https://coveralls.io/github/tsmx/mongoose-encrypted-string?branch=master)
 
-> `EncryptedString` type for Mongoose schemas.
-
-AES-256-CBC encryption-at-rest for strings.
+> `EncryptedString` type for Mongoose schemas. Provides AES-256-CBC encryption-at-rest for strings.
 
 ## Usage
 
 ```js
 var mongoose = require('mongoose');
-const encryptedString = require('@tsmx/mongoose-encryptedstring');
+const mes = require('@tsmx/mongoose-encrypted-string');
 const key = 'YOUR KEY HERE';
 
 // register the new type EncryptedString
-encryptedString.registerEncryptedString(mongoose, key);
+mes.registerEncryptedString(mongoose, key);
 
 // use EncryptedString in your schemas
 Person = mongoose.model('Person', {
@@ -63,6 +61,24 @@ The mongoose instance where `EncryptedString` should be registered.
 #### key
 
 The key used for encryption/decryption. Length must be 32 bytes. See [notes](#notes) for details.
+
+## Use with lean() queries
+
+For performance reasons it maybe useful to use Mongoose's `lean()` queries. Doing so, the query will return the raw JSON objects from the MongoDB database where all properties of type `EncryptedString` are encrypted.
+
+To get the clear text values back you can directly use [@tsmx/string-crypto](https://www.npmjs.com/package/@tsmx/string-crypto) which is also used internally in this package for encryption and decryption.
+
+```js
+const key = 'YOUR KEY HERE';
+const sc = require('@tsmx/string-crypto');
+
+// query raw objects with encrypted string values
+let person = await Person.findOne({ id: 'id-test' }).lean();
+
+// decrypt using string-crypto
+let firstName = sc.decrypt(person.firstName, { key: key });
+let lastName = sc.decrypt(person.lastName, { key: key });
+```
 
 ## Notes
 

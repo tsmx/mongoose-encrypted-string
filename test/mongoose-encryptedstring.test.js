@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 const sc = require('@tsmx/string-crypto');
 const MongoMemoryServer = require('mongodb-memory-server').MongoMemoryServer;
-const mes = require('../mongoose-encryptedstring');
+const mes = require('../mongoose-encrypted-string');
 
-describe('mongoose-encryptedstring test suite', () => {
+describe('mongoose-encrypted-string test suite', () => {
 
     const testKey = '9af7d400be4705147dc724db25bfd2513aa11d6013d7bf7bdb2bfe050593bd0f';
 
