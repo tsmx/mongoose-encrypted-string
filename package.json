@@ -5,7 +5,8 @@
   "main": "mongoose-encryptedstring.js",
   "scripts": {
     "test": "jest",
-    "test-coverage": "jest --coverage"
+    "test-coverage": "jest --coverage",
+    "coveralls": "jest --coverage && coveralls < coverage/lcov.info"
   },
   "author": "tsmx <dev@tsmx.net>",
   "license": "MIT",
@@ -13,11 +14,21 @@
     "type": "git",
     "url": "https://github.com/tsmx/mongoose-encryptedstring.git"
   },
+  "keywords": [
+    "mongoose",
+    "MongoDB",
+    "encryption",
+    "decryption",
+    "string",
+    "AES",
+    "crypto"
+  ],
   "dependencies": {
     "@tsmx/string-crypto": "^1.0.2",
     "mongoose": "^5.10.9"
   },
   "devDependencies": {
+    "coveralls": "^3.1.0",
     "jest": "^26.5.3",
     "mongodb-memory-server": "^6.9.2"
   }

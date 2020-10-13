@@ -18,8 +18,7 @@ class EncryptedString extends SchemaType {
 
 }
 
-module.exports.registerEncrpytedString = function (mongoose, key) {
+module.exports.registerEncryptedString = function (mongoose, key) {
     EncryptedString.options.key = key;
     mongoose.Schema.Types.EncryptedString = EncryptedString;
-    console.log('EncryptedString registered');
 }
