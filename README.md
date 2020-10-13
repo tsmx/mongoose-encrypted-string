@@ -14,7 +14,7 @@ AES-256-CBC encryption-at-rest for strings.
 
 ```js
 var mongoose = require('mongoose');
-const encryptedString = require('../mongoose-encryptedstring');
+const encryptedString = require('@tsmx/mongoose-encryptedstring');
 const key = 'YOUR KEY HERE';
 
 // register the new type EncryptedString
