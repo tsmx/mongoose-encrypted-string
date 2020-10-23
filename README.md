@@ -52,7 +52,7 @@ Directly querying the MongoDB will return the encrypted data.
 
 ### registerEncryptedString(mongoose, key)
 
-Registers the new type `EncryptedString` in the `mongoose` instance's schema types. Encryption/decryption is done using the given `key`. After calling this funtion you can start using the new type via `mongoose.Schema.Types.EncryptedString` in your schemas.
+Registers the new type `EncryptedString` in the `mongoose` instance's schema types. Encryption/decryption is done with AES-256-CBC using the given `key`. After calling this funtion you can start using the new type via `mongoose.Schema.Types.EncryptedString` in your schemas.
 
 #### mongoose
 
