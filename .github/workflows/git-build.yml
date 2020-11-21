@@ -1,4 +1,4 @@
-name: Git CI Build
+name: git-ci-build
 
 on:
   [push]

@@ -32,7 +32,6 @@
     "mongoose": "^5.10.9"
   },
   "devDependencies": {
-    "coveralls": "^3.1.0",
     "jest": "^26.5.3",
     "mongodb-memory-server": "^6.9.2"
   }
