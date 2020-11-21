@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 ![npm (scoped)](https://img.shields.io/npm/v/@tsmx/mongoose-encrypted-string)
 ![node-current (scoped)](https://img.shields.io/node/v/@tsmx/mongoose-encrypted-string)
-[![Build Status](https://img.shields.io/github/workflow/status/tsmx/mongoose-encrypted-string/Git%20CI%20Build)](https://img.shields.io/github/workflow/status/tsmx/mongoose-encrypted-string/Git%20CI%20Build)
+[![Build Status](https://img.shields.io/github/workflow/status/tsmx/mongoose-encrypted-string/git-ci-build)](https://img.shields.io/github/workflow/status/tsmx/mongoose-encrypted-string/git-ci-build)
 [![Coverage Status](https://coveralls.io/repos/github/tsmx/mongoose-encrypted-string/badge.svg?branch=master)](https://coveralls.io/github/tsmx/mongoose-encrypted-string?branch=master)
 
 > `EncryptedString` type for Mongoose schemas. Provides AES-256-CBC encryption-at-rest for strings.
