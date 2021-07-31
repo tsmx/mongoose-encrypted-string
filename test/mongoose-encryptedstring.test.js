@@ -10,53 +10,50 @@ describe('mongoose-encrypted-string test suite', () => {
     var mongoServer = null;
     var Person = null;
 
-    beforeAll(async (done) => {
-        tokens = new Map();
-        mongoServer = new MongoMemoryServer();
-        const dbOptions = {
-            useNewUrlParser: true,
-            useCreateIndex: true,
-            useFindAndModify: false,
-            useUnifiedTopology: true
-        };
-        mongoServer.getUri('encryptedstring').then((mongoUri) => {
-            mongoose.connect(mongoUri, dbOptions);
-            var db = mongoose.connection;
-            db.once('open', function () {
-                done();
+
+    beforeAll(() => {
+        return new Promise((resolve) => {
+            mongoServer = new MongoMemoryServer();
+            const dbOptions = {
+                useNewUrlParser: true,
+                useCreateIndex: true,
+                useFindAndModify: false,
+                useUnifiedTopology: true
+            };
+            mongoServer.getUri('encryptedstring').then((mongoUri) => {
+                mongoose.connect(mongoUri, dbOptions);
+                var db = mongoose.connection;
+                db.once('open', function () {
+                    mes.registerEncryptedString(mongoose, testKey);
+                    Person = mongoose.model('Person', {
+                        id: { type: String, required: true },
+                        firstName: { type: mongoose.Schema.Types.EncryptedString },
+                        lastName: { type: mongoose.Schema.Types.EncryptedString }
+                    });
+                    resolve();
+                });
             });
         });
-
-        mes.registerEncryptedString(mongoose, testKey);
-
-        Person = mongoose.model('Person', {
-            id: { type: String, required: true },
-            firstName: { type: mongoose.Schema.Types.EncryptedString },
-            lastName: { type: mongoose.Schema.Types.EncryptedString }
-        });
     });
 
-    afterAll(async (done) => {
+    afterAll(async () => {
         await mongoose.connection.close();
         await mongoServer.stop();
-        done();
     });
 
-    beforeEach(async (done) => {
+    beforeEach(async () => {
         let testPerson = new Person();
         testPerson.id = 'id-test';
         testPerson.firstName = 'FirstNameTest';
         testPerson.lastName = 'LastNameTest';
         await testPerson.save();
-        done();
     });
 
-    afterEach(async (done) => {
+    afterEach(async () => {
         await Person.deleteMany();
-        done();
     });
 
-    it('tests a successful document creation', async (done) => {
+    it('tests a successful document creation', async () => {
         let person = new Person();
         person.id = 'id-1';
         person.firstName = 'Hans';
@@ -73,10 +70,9 @@ describe('mongoose-encrypted-string test suite', () => {
         expect(savedPersonLean.lastName).not.toBe('Müller');
         let lastNameParts = savedPersonLean.firstName.split('|');
         expect(lastNameParts.length).toBe(2);
-        done();
     });
 
-    it('tests a successful document update', async (done) => {
+    it('tests a successful document update', async () => {
         let person = await Person.findOne({ id: 'id-test' });
         expect(person).toBeDefined();
         expect(person.firstName).toBe('FirstNameTest');
@@ -86,20 +82,18 @@ describe('mongoose-encrypted-string test suite', () => {
         let updatedPerson = await Person.findOne({ id: 'id-test' });
         expect(updatedPerson.firstName).toBe('NewFirstName');
         expect(updatedPerson.lastName).toBe('LastNameTest');
-        done();
     });
 
-    it('tests a successful manual decryption of a document from a lean query', async (done) => {
+    it('tests a successful manual decryption of a document from a lean query', async () => {
         let person = await Person.findOne({ id: 'id-test' }).lean();
         expect(person).toBeDefined();
         expect(person.firstName).not.toBe('FirstNameTest');
         expect(person.lastName).not.toBe('LastNameTest');
         expect(sc.decrypt(person.firstName, { key: testKey })).toBe('FirstNameTest');
         expect(sc.decrypt(person.lastName, { key: testKey })).toBe('LastNameTest');
-        done();
     });
 
-    it('tests a successful document creation and retrieval with null values', async (done) => {
+    it('tests a successful document creation and retrieval with null values', async () => {
         let person = new Person();
         person.id = 'id-1';
         person.firstName = null;
@@ -114,7 +108,6 @@ describe('mongoose-encrypted-string test suite', () => {
         expect(retrievedPerson._id).toBeDefined();
         expect(retrievedPerson.firstName).toStrictEqual(null);
         expect(retrievedPerson.lastName).toBe('Müller');
-        done();
     });
 
 });
