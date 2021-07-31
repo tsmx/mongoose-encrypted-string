@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const sc = require('@tsmx/string-crypto');
-const MongoMemoryServer = require('mongodb-memory-server').MongoMemoryServer;
+const { MongoMemoryServer } = require('mongodb-memory-server');
 const mes = require('../mongoose-encrypted-string');
 
 describe('mongoose-encrypted-string test suite', () => {
@@ -11,28 +11,20 @@ describe('mongoose-encrypted-string test suite', () => {
     var Person = null;
 
 
-    beforeAll(() => {
-        return new Promise((resolve) => {
-            mongoServer = new MongoMemoryServer();
-            const dbOptions = {
-                useNewUrlParser: true,
-                useCreateIndex: true,
-                useFindAndModify: false,
-                useUnifiedTopology: true
-            };
-            mongoServer.getUri('encryptedstring').then((mongoUri) => {
-                mongoose.connect(mongoUri, dbOptions);
-                var db = mongoose.connection;
-                db.once('open', function () {
-                    mes.registerEncryptedString(mongoose, testKey);
-                    Person = mongoose.model('Person', {
-                        id: { type: String, required: true },
-                        firstName: { type: mongoose.Schema.Types.EncryptedString },
-                        lastName: { type: mongoose.Schema.Types.EncryptedString }
-                    });
-                    resolve();
-                });
-            });
+    beforeAll(async () => {
+        mongoServer = await MongoMemoryServer.create({ dbName: 'encryptedstring' });
+        const dbOptions = {
+            useNewUrlParser: true,
+            useCreateIndex: true,
+            useFindAndModify: false,
+            useUnifiedTopology: true
+        };
+        await mongoose.connect(mongoServer.getUri(), dbOptions);
+        mes.registerEncryptedString(mongoose, testKey);
+        Person = mongoose.model('Person', {
+            id: { type: String, required: true },
+            firstName: { type: mongoose.Schema.Types.EncryptedString },
+            lastName: { type: mongoose.Schema.Types.EncryptedString }
         });
     });
 
