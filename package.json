@@ -1,6 +1,6 @@
 {
   "name": "@tsmx/mongoose-encrypted-string",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "EncryptedString type for Mongoose schemas.",
   "main": "mongoose-encrypted-string.js",
   "engines": {
@@ -28,8 +28,8 @@
     "crypto"
   ],
   "dependencies": {
-    "@tsmx/string-crypto": "^1.0.2",
-    "mongoose": "^5.13.5"
+    "@tsmx/string-crypto": "^1.0.4",
+    "mongoose": "^6.0.5"
   },
   "devDependencies": {
     "jest": "^27.0.6",

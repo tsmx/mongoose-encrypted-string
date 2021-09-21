@@ -15,8 +15,6 @@ describe('mongoose-encrypted-string test suite', () => {
         mongoServer = await MongoMemoryServer.create({ dbName: 'encryptedstring' });
         const dbOptions = {
             useNewUrlParser: true,
-            useCreateIndex: true,
-            useFindAndModify: false,
             useUnifiedTopology: true
         };
         await mongoose.connect(mongoServer.getUri(), dbOptions);
