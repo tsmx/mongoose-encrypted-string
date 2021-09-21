@@ -32,7 +32,7 @@
     "mongoose": "^6.0.5"
   },
   "devDependencies": {
-    "jest": "^27.0.6",
+    "jest": "^27.2.0",
     "mongodb-memory-server": "^7.3.4"
   }
 }
