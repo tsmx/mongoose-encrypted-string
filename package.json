@@ -32,6 +32,7 @@
     "mongoose": "^6.7.0"
   },
   "devDependencies": {
+    "eslint": "^8.41.0",
     "jest": "^29.2.2",
     "mongodb-memory-server": "^8.9.5"
   }
