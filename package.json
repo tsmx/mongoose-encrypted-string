@@ -29,11 +29,11 @@
   ],
   "dependencies": {
     "@tsmx/string-crypto": "^1.0.4",
-    "mongoose": "^8.4.0"
+    "mongoose": "^8.5.0"
   },
   "devDependencies": {
-    "eslint": "^8.41.0",
+    "eslint": "^9.8.0",
     "jest": "^29.5.0",
-    "mongodb-memory-server": "^9.3.0"
+    "mongodb-memory-server": "^10.0.0"
   }
 }
