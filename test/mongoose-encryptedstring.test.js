@@ -13,11 +13,7 @@ describe('mongoose-encrypted-string test suite', () => {
 
     beforeAll(async () => {
         mongoServer = await MongoMemoryServer.create({ dbName: 'encryptedstring' });
-        const dbOptions = {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        };
-        await mongoose.connect(mongoServer.getUri(), dbOptions);
+        await mongoose.connect(mongoServer.getUri());
         mes.registerEncryptedString(mongoose, testKey);
         Person = mongoose.model('Person', {
             id: { type: String, required: true },
