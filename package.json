@@ -1,11 +1,11 @@
 {
   "name": "@tsmx/mongoose-encrypted-string",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "EncryptedString type for Mongoose schemas.",
   "main": "mongoose-encrypted-string.js",
   "engines": {
-    "node": ">=12.0.0",
-    "npm": ">=6.0.0"
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
   },
   "scripts": {
     "test": "jest",
