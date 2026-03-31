@@ -98,4 +98,17 @@ describe('mongoose-encrypted-string AES-256-GCM test suite', () => {
         expect(retrievedPerson.lastName).toStrictEqual('Müller');
     });
 
+    it('tests failed decryption due to tampered authTag', async () => {
+        let personLean = await Person.findOne({ id: 'id-test' }).lean();
+        let parts = personLean.firstName.split('|');
+        parts[1] = parts[1][0] === 'a' ? 'b' + parts[1].slice(1) : 'a' + parts[1].slice(1);
+        let tamperedValue = parts.join('|');
+        await mongoose.connection.collection('people').updateOne(
+            { id: 'id-test' },
+            { $set: { firstName: tamperedValue } }
+        );
+        let person = await Person.findOne({ id: 'id-test' });
+        expect(() => person.firstName).toThrow();
+    });
+
 });
