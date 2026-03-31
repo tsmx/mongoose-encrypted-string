@@ -1,7 +1,7 @@
 {
   "name": "@tsmx/mongoose-encrypted-string",
   "version": "1.0.9",
-  "description": "EncryptedString type for Mongoose schemas.",
+  "description": "EncryptedString type for Mongoose schemas providing AES-GCM and AES-CBC encryption at rest.",
   "main": "mongoose-encrypted-string.js",
   "engines": {
     "node": ">=18.0.0",
@@ -25,6 +25,9 @@
     "decryption",
     "string",
     "AES",
+    "AES-256-GCM",
+    "AES-256-CBC",
+    "encryption-at-rest",
     "crypto"
   ],
   "dependencies": {
