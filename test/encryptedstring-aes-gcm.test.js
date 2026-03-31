@@ -3,7 +3,7 @@ const sc = require('@tsmx/string-crypto');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const mes = require('../mongoose-encrypted-string');
 
-describe('mongoose-encrypted-string test suite', () => {
+describe('mongoose-encrypted-string AES-256-GCM test suite', () => {
 
     const testKey = '9af7d400be4705147dc724db25bfd2513aa11d6013d7bf7bdb2bfe050593bd0f';
 
@@ -14,7 +14,7 @@ describe('mongoose-encrypted-string test suite', () => {
     beforeAll(async () => {
         mongoServer = await MongoMemoryServer.create({ dbName: 'encryptedstring' });
         await mongoose.connect(mongoServer.getUri());
-        mes.registerEncryptedString(mongoose, testKey);
+        mes.registerEncryptedString(mongoose, testKey, 'aes-256-gcm');
         Person = mongoose.model('Person', {
             id: { type: String, required: true },
             firstName: { type: mongoose.Schema.Types.EncryptedString },
@@ -47,36 +47,38 @@ describe('mongoose-encrypted-string test suite', () => {
         let savedPerson = await person.save();
         expect(savedPerson).toBeDefined();
         expect(savedPerson._id).toBeDefined();
-        expect(savedPerson.firstName).toBe('Hans');
-        expect(savedPerson.lastName).toBe('Müller');
+        expect(savedPerson.firstName).toStrictEqual('Hans');
+        expect(savedPerson.lastName).toStrictEqual('Müller');
         let savedPersonLean = await Person.findById(savedPerson._id).lean();
-        expect(savedPersonLean.firstName).not.toBe('Hans');
+        expect(savedPersonLean.firstName).not.toStrictEqual('Hans');
         let firstNameParts = savedPersonLean.firstName.split('|');
-        expect(firstNameParts.length).toBe(2);
-        expect(savedPersonLean.lastName).not.toBe('Müller');
+        expect(firstNameParts.length).toStrictEqual(3);
+        expect(savedPersonLean.lastName).not.toStrictEqual('Müller');
         let lastNameParts = savedPersonLean.firstName.split('|');
-        expect(lastNameParts.length).toBe(2);
+        expect(lastNameParts.length).toStrictEqual(3);
     });
 
     it('tests a successful document update', async () => {
         let person = await Person.findOne({ id: 'id-test' });
         expect(person).toBeDefined();
-        expect(person.firstName).toBe('FirstNameTest');
-        expect(person.lastName).toBe('LastNameTest');
+        expect(person.firstName).toStrictEqual('FirstNameTest');
+        expect(person.lastName).toStrictEqual('LastNameTest');
         person.firstName = 'NewFirstName';
         await person.save();
         let updatedPerson = await Person.findOne({ id: 'id-test' });
-        expect(updatedPerson.firstName).toBe('NewFirstName');
-        expect(updatedPerson.lastName).toBe('LastNameTest');
+        expect(updatedPerson.firstName).toStrictEqual('NewFirstName');
+        expect(updatedPerson.lastName).toStrictEqual('LastNameTest');
     });
 
     it('tests a successful manual decryption of a document from a lean query', async () => {
         let person = await Person.findOne({ id: 'id-test' }).lean();
         expect(person).toBeDefined();
-        expect(person.firstName).not.toBe('FirstNameTest');
-        expect(person.lastName).not.toBe('LastNameTest');
-        expect(sc.decrypt(person.firstName, { key: testKey })).toBe('FirstNameTest');
-        expect(sc.decrypt(person.lastName, { key: testKey })).toBe('LastNameTest');
+        expect(person.firstName).not.toStrictEqual('FirstNameTest');
+        expect(person.firstName.split('|').length).toStrictEqual(3);
+        expect(person.lastName).not.toStrictEqual('LastNameTest');
+        expect(person.lastName.split('|').length).toStrictEqual(3);
+        expect(sc.decrypt(person.firstName, { key: testKey })).toStrictEqual('FirstNameTest');
+        expect(sc.decrypt(person.lastName, { key: testKey })).toStrictEqual('LastNameTest');
     });
 
     it('tests a successful document creation and retrieval with null values', async () => {
@@ -88,12 +90,25 @@ describe('mongoose-encrypted-string test suite', () => {
         expect(savedPerson).toBeDefined();
         expect(savedPerson._id).toBeDefined();
         expect(savedPerson.firstName).toStrictEqual(null);
-        expect(savedPerson.lastName).toBe('Müller');
+        expect(savedPerson.lastName).toStrictEqual('Müller');
         let retrievedPerson = await Person.findOne({ id: 'id-1' });
         expect(retrievedPerson).toBeDefined();
         expect(retrievedPerson._id).toBeDefined();
         expect(retrievedPerson.firstName).toStrictEqual(null);
-        expect(retrievedPerson.lastName).toBe('Müller');
+        expect(retrievedPerson.lastName).toStrictEqual('Müller');
+    });
+
+    it('tests failed decryption due to tampered authTag', async () => {
+        let personLean = await Person.findOne({ id: 'id-test' }).lean();
+        let parts = personLean.firstName.split('|');
+        parts[1] = parts[1][0] === 'a' ? 'b' + parts[1].slice(1) : 'a' + parts[1].slice(1);
+        let tamperedValue = parts.join('|');
+        await mongoose.connection.collection('people').updateOne(
+            { id: 'id-test' },
+            { $set: { firstName: tamperedValue } }
+        );
+        let person = await Person.findOne({ id: 'id-test' });
+        expect(() => person.firstName).toThrow();
     });
 
 });
