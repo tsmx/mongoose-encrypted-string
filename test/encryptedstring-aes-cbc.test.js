@@ -3,7 +3,7 @@ const sc = require('@tsmx/string-crypto');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const mes = require('../mongoose-encrypted-string');
 
-describe('mongoose-encrypted-string test suite', () => {
+describe('mongoose-encrypted-string AES-256-CBC test suite', () => {
 
     const testKey = '9af7d400be4705147dc724db25bfd2513aa11d6013d7bf7bdb2bfe050593bd0f';
 
@@ -14,7 +14,7 @@ describe('mongoose-encrypted-string test suite', () => {
     beforeAll(async () => {
         mongoServer = await MongoMemoryServer.create({ dbName: 'encryptedstring' });
         await mongoose.connect(mongoServer.getUri());
-        mes.registerEncryptedString(mongoose, testKey);
+        mes.registerEncryptedString(mongoose, testKey, 'aes-256-cbc');
         Person = mongoose.model('Person', {
             id: { type: String, required: true },
             firstName: { type: mongoose.Schema.Types.EncryptedString },
