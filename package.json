@@ -28,7 +28,7 @@
     "crypto"
   ],
   "dependencies": {
-    "@tsmx/string-crypto": "^1.0.4",
+    "@tsmx/string-crypto": "^2.0.0",
     "mongoose": "^9.0.0"
   },
   "devDependencies": {

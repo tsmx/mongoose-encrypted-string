@@ -4,7 +4,7 @@ const sc = require('@tsmx/string-crypto');
 class EncryptedString extends SchemaType {
     constructor(key, options) {
         options.get = (v) => { return sc.decrypt(v, { key: EncryptedString.options.key, passNull: true }); };
-        options.set = (v) => { return sc.encrypt(v, { key: EncryptedString.options.key, passNull: true }); };
+        options.set = (v) => { return sc.encrypt(v, { key: EncryptedString.options.key, passNull: true, algorithm: 'aes-256-cbc' }); };
         super(key, options, 'EncryptedString');
     }
 
