@@ -8,7 +8,7 @@
 
 > `EncryptedString` type for Mongoose schemas. Provides AES-256-GCM and AES-256-CBC encryption-at-rest for strings.
 
-The AES-256-GCM algorithm provides a cryptographic tamper-safety of the encrypted data and should be preferred over AES-256-CBC. See also the [migration guide](#migrating-from-aes-cbc-to-aes-gcm) if you are already using AES-256-CBC.
+**Note:** The AES-256-GCM algorithm provides an additional cryptographic tamper-safety of the encrypted data by adding an authTag and should be preferred over AES-256-CBC. See also the [migration guide](#migrating-from-aes-cbc-to-aes-gcm) if you are already using AES-256-CBC.
 
 ## Usage
 
