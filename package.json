@@ -8,9 +8,9 @@
     "npm": ">=9.0.0"
   },
   "scripts": {
-    "test": "jest",
-    "test-coverage": "jest --coverage",
-    "coveralls": "jest --coverage && coveralls < coverage/lcov.info"
+    "test": "NODE_OPTIONS=\"--experimental-vm-modules\" jest",
+    "test-coverage": "NODE_OPTIONS=\"--experimental-vm-modules\" jest --coverage",
+    "coveralls": "NODE_OPTIONS=\"--experimental-vm-modules\" jest --coverage && coveralls < coverage/lcov.info"
   },
   "author": "tsmx <dev@tsmx.net>",
   "license": "MIT",
